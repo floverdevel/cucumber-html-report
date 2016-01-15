@@ -78,41 +78,65 @@
 		img {
 			margin-top: 10px;
 		}
+		.hidden {
+			display: none;
+		}
 	</style>
 	<title>Cucumber Report</title>
 </head>
 <body>
-	<h1>Cucumber Report</h1>
-	{{#reports}}
-	<div class="report">
-		<h2>{{keyword}}: {{name}} <span class="tags">{{tags}}</span></h2>
-		<p class="filename">{{uri}}</p>
-		<p class="story">{{description}}</p>
-		{{#elements}}
-			<h3>{{keyword}}: {{name}}</h3>
-			<table>
-				<tr>
-					<th style="width: 100px;">Line</th>
-					<th style="width: 100px;">Condition</th>
-					<th>Step</th>
-					<th style="width: 100px;">Status</th>
-				</tr>
-			{{#steps}}
-			<tr class="{{result.status}}">
-				<td>{{line}}</td>
-				<td>{{keyword}}</td>
-				<td>{{name}}</td>
-				<td class="status">{{result.status}}</td>
-			</tr>
-			{{/steps}}
-			</table>
-			{{#image}}{{imageName}}{{/image}}
-		{{/elements}}
-	</div>
-	{{/reports}}
+<h1>Cucumber Report</h1>
+{{#reports}}
+<div class="report">
+	<h2>{{keyword}}: {{name}} <span class="tags">{{tags}}</span></h2>
+	<p class="filename">{{uri}}</p>
+	<p class="story">{{description}}</p>
+	{{#elements}}
+	<h3>{{keyword}}: {{name}}</h3>
+	<table>
+		<tr>
+			<th style="width: 100px;">Line</th>
+			<th style="width: 100px;">Condition</th>
+			<th>Step</th>
+			<th style="width: 100px;">Status</th>
+		</tr>
+		{{#steps}}
+		<tr class="{{result.status}}">
+			<td>{{line}}</td>
+			<td>{{keyword}}</td>
+			<td>{{name}}</td>
+			<td class="status">{{result.status}}</td>
+		</tr>
+		<tr class="hidden">
+			<td colspan="4"><pre>{{result.error_message}}</pre></td>
+		</tr>
+		{{/steps}}
+	</table>
+	{{#image}}{{imageName}}{{/image}}
+	{{/elements}}
+</div>
+{{/reports}}
 
-	<div class="footer">
-		<p><a href="https://github.com/leinonen/grunt-cucumber-html-report">Cucumber HTML Report Generator</a> by <a href="http://leinonen.se">Peter Leinonen</a> 2015.</p>
-	</div>
+<div class="footer">
+	<p><a href="https://github.com/leinonen/grunt-cucumber-html-report">Cucumber HTML Report Generator</a> by <a href="http://leinonen.se">Peter Leinonen</a> 2015.</p>
+</div>
+<script type="text/javascript">
+	(function () {
+		'use strict';
+
+		var failed = document.getElementsByClassName('failed');
+		for (var i = 0; i < failed.length; i += 1) {
+			failed[i].addEventListener('click', (function (i) {
+				return function () {
+					if (failed[i].nextElementSibling.classList.contains('hidden')) {
+						failed[i].nextElementSibling.classList.remove('hidden');
+					} else {
+						failed[i].nextElementSibling.classList.add('hidden');
+					}
+				}
+			})(i));
+		}
+	})(window);
+</script>
 </body>
 </html>
